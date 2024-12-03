@@ -12,7 +12,7 @@ public class Book extends LibraryItem{
 
     @Override
     public String getDetails() {
-        return "Book : [Title : " + super.title
+        return super.id + " - Book : [Title : " + super.title
                 + ", Author : " + author
                 + ", Genre : " + genre
                 + ", Year : " + super.publicationYear;

@@ -3,7 +3,9 @@ import models.BorrowRecord;
 import models.LibraryItem;
 import models.Magazine;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -49,27 +51,32 @@ public class Main {
     public static void displayAllElements(){
         System.out.println("\nAll elements : ");
         for(LibraryItem libraryItem : library){
-            System.out.println(libraryItem.getId() + " - " + libraryItem.getDetails());
+            System.out.println(libraryItem.getDetails());
         }
         System.out.println();
     }
 
     public static void displayItemStatus(){
         displayAvailableItems();
+        System.out.println();
         displayBorrowedItems();
+        System.out.println();
     }
 
     public static void displayAvailableItems(){
         System.out.println("Available items : ");
         for(LibraryItem libraryItem : library){
-            LibraryItem libraryAvailable = null;
+            boolean isAvailable = true;
 
             for(BorrowRecord record : borrowRecordList){
-                LibraryItem libraryItemFound = getItemInLibraryById(record.itemId());
-                if(libraryItemFound == null)
-                    System.out.println(libraryItem.getDetails());
+                if (libraryItem.getId() == record.itemId()) {
+                    isAvailable = false;
+                    break;
+                }
             }
 
+            if(isAvailable)
+                System.out.println(libraryItem.getDetails());
         }
     }
 
@@ -90,6 +97,13 @@ public class Main {
         int idChoiced = sc.nextInt();
         sc.nextLine();
 
+        System.out.println("Whats the borrower's name ?");
+        String borrowerName = sc.nextLine();
+
+        for(LibraryItem libraryItem : library){
+            if(idChoiced == libraryItem.getId())
+                borrowRecordList.add(new BorrowRecord(libraryItem.getId(), borrowerName , LocalDate.now().toString()));
+        }
     }
 
     public static void createLibraryItem(){

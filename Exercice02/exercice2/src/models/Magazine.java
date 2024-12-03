@@ -10,7 +10,7 @@ public class Magazine extends LibraryItem{
 
     @Override
     public String getDetails() {
-        return "Magazine : [Title : " + super.title
+        return super.id + " - Magazine : [Title : " + super.title
                 + ", Number : " + issueNumber
                 + ", Year : " + super.publicationYear;
     }
