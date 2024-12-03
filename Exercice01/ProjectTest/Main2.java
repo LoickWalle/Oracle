@@ -1,7 +1,7 @@
 package ProjectTest; 
 
-import Project.Person;
-import Project.Yearbook;
+import myproject.Person;
+import myproject.Yearbook;
 
 import java.util.Scanner;
 
