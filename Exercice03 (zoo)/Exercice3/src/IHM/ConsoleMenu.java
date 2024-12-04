@@ -47,7 +47,7 @@ public class ConsoleMenu {
     }
 
     public void feedAnimals() {
-        new ZooAction(){
+        ZooAction zooAction = new ZooAction(){
             @Override
             public void Action() {
                 zooManager.getEnclosures().forEach(enclosure ->
@@ -55,7 +55,7 @@ public class ConsoleMenu {
                 );
             }
         };
-
+        zooAction.Action();
     }
 
     private void displayAnimals() {
