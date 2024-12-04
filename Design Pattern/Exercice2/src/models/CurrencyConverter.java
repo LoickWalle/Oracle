@@ -3,7 +3,6 @@ package models;
 import java.util.Objects;
 
 public class CurrencyConverter {
-
     private final double EUR_TO_USD = 1.1;
     private final double GBP_TO_USD = 1.3;
 
@@ -19,9 +18,9 @@ public class CurrencyConverter {
     }
 
     public double convertFromUSD(String currency, double amount) {
-        if(Objects.equals(currency, "EUR"))
+        if(currency.equals("EUR"))
             return amount / EUR_TO_USD;
-        if(Objects.equals(currency, "GBP"))
+        if(currency.equals("GBP"))
             return amount / GBP_TO_USD;
         else{
             System.out.println("Currency not available.");

@@ -20,7 +20,7 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 
     private double convertToUSD(String fromCurrency, double amount){
         return switch (fromCurrency) {
-            case "USD" -> amount; // Already in USD
+            case "USD" -> amount;
             case "EUR" -> converter.convertToUSD("EUR", amount);
             case "GBP" -> converter.convertToUSD("GBP", amount);
             default -> throw new IllegalArgumentException("Unsupported currency: " + fromCurrency);
