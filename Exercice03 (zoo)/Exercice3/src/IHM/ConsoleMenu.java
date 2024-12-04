@@ -1,6 +1,7 @@
 package IHM;
 
 import Models.*;
+import interfaces.ZooAction;
 
 import java.util.Scanner;
 import java.util.UUID;
@@ -45,10 +46,16 @@ public class ConsoleMenu {
         zooManager.addEnclosure(new Enclosure(zooManager.getEnclosures().size(), enclosureName));
     }
 
-    private void feedAnimals() {
-        zooManager.getEnclosures().forEach(enclosure ->
-                enclosure.getAnimalList().forEach(Animal::eat)
-        );
+    public void feedAnimals() {
+        new ZooAction(){
+            @Override
+            public void Action() {
+                zooManager.getEnclosures().forEach(enclosure ->
+                        enclosure.getAnimalList().forEach(Animal::eat)
+                );
+            }
+        };
+
     }
 
     private void displayAnimals() {
