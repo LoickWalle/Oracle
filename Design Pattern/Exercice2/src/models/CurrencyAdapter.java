@@ -14,25 +14,7 @@ public class CurrencyAdapter implements ICurrencyAdapter {
         if (fromCurrency.equals(toCurrency))
             return amount;
 
-        double amountUSD = convertToUSD(fromCurrency, amount);
-        return convertFromUSD(toCurrency, amountUSD);
-    }
-
-    private double convertToUSD(String fromCurrency, double amount){
-        return switch (fromCurrency) {
-            case "USD" -> amount;
-            case "EUR" -> converter.convertToUSD("EUR", amount);
-            case "GBP" -> converter.convertToUSD("GBP", amount);
-            default -> throw new IllegalArgumentException("Unsupported currency: " + fromCurrency);
-        };
-    }
-
-    private double convertFromUSD(String toCurrency, double amountInUSD) {
-        return switch (toCurrency) {
-            case "USD" -> amountInUSD;
-            case "EUR" -> converter.convertFromUSD("EUR", amountInUSD);
-            case "GBP" -> converter.convertFromUSD("GBP", amountInUSD);
-            default -> throw new IllegalArgumentException("Unsupported currency: " + toCurrency);
-        };
+        double amountUSD = converter.convertToUSD(fromCurrency, amount);
+        return converter.convertFromUSD(toCurrency, amountUSD);
     }
 }
