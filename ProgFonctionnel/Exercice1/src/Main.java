@@ -27,31 +27,42 @@ public class Main {
         calculatorMap.put(3, division);
 
         Consumer<String> displayIHM = message -> {
-            System.out.println("Quelle opération effectuer ?");
-            System.out.println("0. Addition");
-            System.out.println("1. Soustraction");
-            System.out.println("2. Multiplication");
-            System.out.println("3. Division");
-            System.out.println("4. Quitter");
-            System.out.print("Votre choix : ");
+            switch (message){
+                case "menu" :
+                    System.out.println("Quelle opération effectuer ?");
+                    System.out.println("0. Addition");
+                    System.out.println("1. Soustraction");
+                    System.out.println("2. Multiplication");
+                    System.out.println("3. Division");
+                    System.out.println("4. Quitter");
+                    System.out.print("Votre choix : ");
+                    break;
+                case "bye" :
+                    System.out.println("Au revoir !");
+                    break;
+                case "invalid":
+                    System.out.println("Choix invalide. Essayez encore.\n");
+                    break;
+            }
+
         };
 
         int choice;
         double nb1, nb2;
 
         do {
-            displayIHM.accept("");
+            displayIHM.accept("menu");
 
             choice = sc.nextInt();
             sc.nextLine();
 
             if (choice == 4) {
-                System.out.println("Au revoir !");
+                displayIHM.accept("bye");
                 break;
             }
 
             if (choice < 0 || choice > 3) {
-                System.out.println("Choix invalide. Essayez encore.\n");
+                displayIHM.accept("invalid");
                 continue;
             }
 
