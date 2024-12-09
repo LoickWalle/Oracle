@@ -1,6 +1,6 @@
 package interfaces;
 
 @FunctionalInterface
-public interface Calculator {
-    Double calculate(Double a, Double b);
+public interface Calculator<T extends Number> {
+    T calculate(T a, T b);
 }
