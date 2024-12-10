@@ -123,29 +123,26 @@ public class Main {
     }
 
     private static void displayRealisatorWith50Movies(List<Movie> movieList) {
-        Map<String, Long> realisators = movieList.stream()
+        movieList.stream()
                 .collect(Collectors.groupingBy(
                         Movie::getRealisator,
                         Collectors.counting()
-                ));
-
-        realisators.entrySet().stream()
+                ))
+                .entrySet().stream()
                 .filter(entry -> entry.getValue() > 50)
                 .forEach(entry -> System.out.println("Le réalisateur " + entry.getKey() + " a réalisé " + entry.getValue() + " films."));
     }
 
     private static void displayFirstMovieByGender(List<Movie> movieList) {
-        Map<String, Optional<Movie>> firstMovieInEachGenre = movieList.stream()
+        movieList.stream()
                 .collect(Collectors.groupingBy(
                         Movie::getGender,
                         Collectors.minBy(Comparator.comparing(Movie::getReleaseDate))
-                ));
-
-        firstMovieInEachGenre.forEach((genre, movieOptional) ->
-                movieOptional.ifPresent(movie ->
-                        System.out.println("Le premier film du genre " + genre + " est : " + movie.getTitle() + " - " + movie.getReleaseDate())
-                )
-        );
+                ))
+                .forEach((genre, movieOptional) ->
+                    movieOptional.ifPresent(movie ->
+                            System.out.println("Le premier film du genre " + genre + " est : " + movie.getTitle() + " - " + movie.getReleaseDate())
+                    ));
     }
 
     private static void displayUniqueGenres(List<Movie> movieList) {
@@ -163,25 +160,23 @@ public class Main {
 
 
     private static void displayAverageEntranceByRealisator(List<Movie> movieList, String realisator) {
-        OptionalDouble average = movieList.stream()
+        movieList.stream()
                 .filter(movie -> movie.getRealisator().contains(realisator))
                 .mapToDouble(Movie::getEntranceNumber)
-                .average();
-
-        if (average.isPresent())
-            System.out.println("La moyenne des entrées pour " + realisator + " est : " + average.getAsDouble());
-        else
-            System.out.println("Aucun film trouvé pour le réalisateur " + realisator);
+                .average()
+                .ifPresentOrElse(
+                        avg -> System.out.println("La moyenne des entrées pour " + realisator + " est : " + avg),
+                        () -> System.out.println("Aucun film trouvé pour le réalisateur " + realisator)
+                );
     }
 
     private static void displayGenderOfMostEntrance(List<Movie> movieList) {
-        Map<String, Long> mapOfGenderWithEntranceSum = movieList.stream()
+        String maxGenre = movieList.stream()
                 .collect(Collectors.groupingBy(
                         Movie::getGender,
-                        Collectors.summingLong(Movie::getEntranceNumber)
-                ));
-
-        String maxGenre = mapOfGenderWithEntranceSum.entrySet().stream()
+                        Collectors.summingLong(Movie::getEntranceNumber)))
+                .entrySet()
+                .stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse("Unknown Genre");
@@ -198,25 +193,20 @@ public class Main {
     }
 
     private static void displayAndRegroupMovieByRealisator(List<Movie> movieList) {
-        Map<String, List<String>> moviesByRealisator = movieList.stream()
+        movieList.stream()
                 .collect(Collectors.groupingBy(
                         Movie::getRealisator,
-                        Collectors.mapping(Movie::getTitle, Collectors.toList())
-                ));
-
-        moviesByRealisator.forEach((realisator, titles) -> {
-            System.out.println("Réalisateur: " + realisator);
-            titles.forEach(title -> System.out.println("  - " + title));
-        });
+                        Collectors.mapping(Movie::getTitle, Collectors.toList())))
+                .forEach((realisator, titles) -> {
+                    System.out.println("Réalisateur: " + realisator);
+                    titles.forEach(title -> System.out.println("  - " + title));
+                });
     }
 
     private static void displayAndRegroupNumberOfMovieByGender(List<Movie> movieList) {
-        Map<String, Long> genreCounts = movieList.stream()
-                .collect(Collectors.groupingBy(Movie::getGender, Collectors.counting()));
-
-        genreCounts.forEach((genre, count) ->
-                System.out.println("Genre: " + genre + " - " + count + " films")
-        );
+        movieList.stream()
+                .collect(Collectors.groupingBy(Movie::getGender, Collectors.counting()))
+                .forEach((genre, count) -> System.out.println("Genre: " + genre + " - " + count + " films"));
     }
 
     private static void display10LessSeenMoviesSorted(List<Movie> movieList) {
@@ -243,20 +233,17 @@ public class Main {
     }
 
     private static void displayMovieByRealisator(List<Movie> movieList, String realisatorSearched) {
-        Optional<String> realisator = movieList.stream()
+        movieList.stream()
                 .map(Movie::getRealisator)
-                .filter(movieRealisator -> movieRealisator.contains(realisatorSearched))
-                .findFirst();
-
-        if(realisator.isEmpty()){
-            System.out.println("Nom du réalisateur non existant...");
-        }
-        else {
-            System.out.println("Films réalisés par " + realisator.get() + " : ");
-            movieList.stream()
-                    .filter(movie -> movie.getRealisator().equals(realisator.get()))
-                    .forEach(movie -> System.out.println(" - " + movie.getTitle()));
-        }
+                .filter(realisator -> realisator.contains(realisatorSearched))
+                .distinct()
+                .findFirst()
+                .ifPresentOrElse(realisator -> {
+                    System.out.println("Films réalisés par " + realisator + " : ");
+                    movieList.stream()
+                            .filter(movie -> movie.getRealisator().equals(realisator))
+                            .forEach(movie -> System.out.println(" - " + movie.getTitle()));
+                }, () -> System.out.println("Nom du réalisateur non existant..."));
     }
 
     private static void displayMovieTitleAfter20s(List<Movie> movieList) {
@@ -267,22 +254,17 @@ public class Main {
     }
 
     private static void displayMovieByGender(List<Movie> movieList, String genderSearched) {
-
-        Optional<String> genderFound = movieList.stream()
+        movieList.stream()
                 .map(Movie::getGender)
-                .filter(movieGender -> movieGender.contains(genderSearched))
-                .findFirst();
-
-        if(genderFound.isEmpty()){
-            System.out.println("Nom du genre non existant...");
-        }
-        else {
-            System.out.println("Films du genre " + genderFound.get() + " :");
-            movieList.stream()
-                    .filter(movie -> movie.getGender().equals(genderFound.get()))
-                    .forEach(movie -> System.out.println("'" + movie.getTitle() + "' paru le : " + movie.getReleaseDate()));
-
-        }
+                .distinct()
+                .filter(gender -> gender.contains(genderSearched))
+                .findFirst()
+                .ifPresentOrElse(gender -> {
+                    System.out.println("Films du genre " + gender + " :");
+                    movieList.stream()
+                            .filter(movie -> movie.getGender().equals(gender))
+                            .forEach(movie -> System.out.println("'" + movie.getTitle() + "' paru le : " + movie.getReleaseDate()));
+                }, () -> System.out.println("Nom du genre non existant..."));
     }
 
     private static void displayAllMoviesTitle(List<Movie> movieList) {
@@ -296,22 +278,25 @@ public class Main {
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("src/films_with_genres 1.csv"))) {
             records = reader.lines()
-                    .skip(1)
+                    .skip(1)  // Skip header
                     .map(line -> Arrays.asList(line.split(",")))
                     .toList();
 
-            if(records.isEmpty())
-                return null;
+            if (records.isEmpty()) {
+                return Collections.emptyList();
+            }
 
             System.out.println("Lecture du fichier réussi !");
+
             movieList = records.stream()
                     .map(ele -> new Movie(
-                            ele.getFirst(),
-                            LocalDate.parse(ele.get(1)),
-                            ele.get(2),
-                            ele.get(3),
-                            Integer.parseInt(ele.get(4))))
-                    .toList();
+                            ele.get(0), // Title
+                            LocalDate.parse(ele.get(1)), // Release Date
+                            ele.get(2), // Gender
+                            ele.get(3), // Realisator
+                            Integer.parseInt(ele.get(4)) // Entrance Number
+                    ))
+                    .collect(Collectors.toList());
 
             System.out.println("Voici les 10 premiers films : ");
             movieList.stream().limit(10).forEach(System.out::println);
@@ -319,5 +304,6 @@ public class Main {
             return movieList;
         }
     }
+
 
 }
