@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Aspect
 @Component
@@ -23,7 +24,7 @@ public class ExceptionAspect {
 
     @AfterThrowing(value = "excepPointCut()",throwing = "ex")
     public void afterThrowing (JoinPoint joinPoint, Exception ex){
-        String message = "Exception reçu à " + LocalDateTime.now() + " : "+ex.getMessage()+ " appelé par "+ joinPoint.getSignature().getName();
+        String message = "Exception reçu à " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + " : "+ex.getMessage()+ " appelé par "+ joinPoint.getSignature().getName();
         System.out.println(message);
 
         File file = new File("exceptionLog.txt");

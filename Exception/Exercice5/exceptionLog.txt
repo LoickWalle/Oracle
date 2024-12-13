@@ -1,0 +1,1 @@
+Exception reçu à 2024-12-13 10:11:28 : Livre non trouvé ! appelé par deleteBook

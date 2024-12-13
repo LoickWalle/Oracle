@@ -6,6 +6,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @Aspect
@@ -21,7 +24,10 @@ public class LoggingAspect {
     public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         System.out.println("Logging : ");
-        System.out.printf("Method %s called with arguments: %s\n", joinPoint.getSignature().getName(), Arrays.toString(args));
+        System.out.printf("Method %s called at %s with arguments: %s\n",
+                joinPoint.getSignature().getName(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                Arrays.toString(args));
 
         Object result = joinPoint.proceed();
 
