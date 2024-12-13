@@ -6,6 +6,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+
 @Aspect
 @Component
 public class ExceptionAspect {
@@ -17,7 +23,14 @@ public class ExceptionAspect {
 
     @AfterThrowing(value = "excepPointCut()",throwing = "ex")
     public void afterThrowing (JoinPoint joinPoint, Exception ex){
+        String message = "Exception reçu à " + LocalDateTime.now() + " : "+ex.getMessage()+ " appelé par "+ joinPoint.getSignature().getName();
+        System.out.println(message);
 
-        System.out.println("Exception message in Advice "+ex.getMessage()+ " "+ joinPoint.getSignature().getName());
+        File file = new File("exceptionLog.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
