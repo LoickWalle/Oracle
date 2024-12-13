@@ -28,16 +28,19 @@ public class BookService {
     public Book getBookByName(String name) {
         return books.stream()
                 .filter(book -> book.getName().contains(name))
-                .orElseThrow(() -> new BookNotFoundException("Book not found"));
+                .findFirst()
+                .orElseThrow(() -> new BookNotFoundException("Livre non trouvé !"));
     }
 
     @Log
     @Performance
     @ExceptionHandled
-    public void deleteBook(Long id) {
-        if (!bookRepository.existsById(id)) {
-            throw new BookNotFoundException("Book not found");
-        }
-        bookRepository.deleteById(id);
+    public void deleteBook(String name) {
+        Book bookToDelete = books.stream()
+                .filter(book -> book.getName().contains(name))
+                .findFirst()
+                .orElseThrow(() -> new BookNotFoundException("Livre non trouvé !"));
+
+        books.remove(bookToDelete);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExceptionAspect {
 
-    @Pointcut("@annotation(ExceptionHandled)")
+    @Pointcut("@annotation(org.example.annotation.ExceptionHandled)")
     public void excepPointCut(){
 
     }
