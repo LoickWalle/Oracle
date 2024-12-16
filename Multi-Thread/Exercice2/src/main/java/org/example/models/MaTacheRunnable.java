@@ -1,9 +1,9 @@
 package org.example.models;
 
-public class MaTâcheRunnable implements Runnable{
+public class MaTacheRunnable implements Runnable{
     private final int nb;
 
-    public MaTâcheRunnable(int nb) {
+    public MaTacheRunnable(int nb) {
         this.nb = nb;
     }
 
