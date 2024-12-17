@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Main {
     private static AtomicInteger atomicInteger = new AtomicInteger(0);
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
         scheduler.scheduleWithFixedDelay(() -> {

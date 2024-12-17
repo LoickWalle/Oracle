@@ -1,10 +1,9 @@
 package org.example;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Main {
-    private static AtomicLong atomicLong = new AtomicLong(1);
+    private static final AtomicLong atomicLong = new AtomicLong(1);
 
     public static void main(String[] args) throws InterruptedException {
         Thread[] threads = new Thread[5];
