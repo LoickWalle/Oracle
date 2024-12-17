@@ -1,80 +1,48 @@
 package org.example;
 
+import org.example.models.BankAccount;
+
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
     private static final Object lock = new Object();
-    private static final Lock reentrantLock = new ReentrantLock();
 
     public static void main(String[] args) throws InterruptedException {
-        demoWithoutSync();
-        demoWithLock();
-        demoWithReentrantLock();
-    }
+        BankAccount bankAccount = new BankAccount();
 
-    static class IdGenerator{
-        private static int id =0;
+        Thread[] threads = new Thread[3];
 
-        public static int generateId(){
-            return id++;
-        }
-    }
-
-    private static void demoWithReentrantLock() throws InterruptedException {
-        IdGenerator.id = 0;
-        Thread[] threads = createThreads(() -> {
-            for (int i = 0; i < 1000; i++) {
-                try {
-                    reentrantLock.lock();
-                    IdGenerator.generateId();
-                } finally {
-                    reentrantLock.unlock();
-                }
-            }
-        }, 5);
-
-        runThreads(threads);
-        System.out.println("Valeur finale with reentrant sync : " + IdGenerator.id);
-    }
-
-    private static void demoWithLock() throws InterruptedException {
-        IdGenerator.id = 0;
-        Thread[] threads = createThreads(() -> {
-            for (int i = 0; i < 1000; i++) {
+        threads[0] = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
                 synchronized (lock){
-                    IdGenerator.generateId();
+                    bankAccount.deposit();
                 }
             }
-        }, 5);
+        });
 
-        runThreads(threads);
-        System.out.println("Valeur finale with sync : " + IdGenerator.id);
-    }
-
-    private static void demoWithoutSync() throws InterruptedException {
-        IdGenerator.id = 0;
-        Thread[] threads = createThreads(() -> {
-            for (int i = 0; i < 1000; i++) {
-                IdGenerator.generateId();
+        threads[1] = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                synchronized (lock){
+                    bankAccount.withdraw();
+                }
             }
-        }, 5);
+        });
+
+        threads[2] = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                synchronized (lock){
+                    bankAccount.deposit();
+                }
+            }
+        });
 
         runThreads(threads);
-        System.out.println("Valeur finale without sync : " + IdGenerator.id);
-    }
-
-    private static Thread[] createThreads(Runnable task, int nbThread){
-        Thread[] threads = new Thread[nbThread];
-        for (int i = 0; i < nbThread; i++) {
-            threads[i] = new Thread(task);
-        }
-        return threads;
+        System.out.println("Solde final : " + BankAccount.getSolde());
     }
 
     private static void runThreads(Thread[] threads) throws InterruptedException {
         for (Thread thread : threads) thread.start();
         for (Thread thread : threads) thread.join();
     }
-
 }
