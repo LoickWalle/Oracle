@@ -10,8 +10,10 @@ public class Main {
 
         for (int i = 0; i < 10; i++) {
             threads[i] = new Thread(() -> {
-                if(atomicInteger.get() < 10 ){
-                    System.out.println(Thread.currentThread().getName() + " a incrémenté le compteur à " + atomicInteger.incrementAndGet());
+                int current = atomicInteger.get();
+                if(current < 10){
+                    atomicInteger.compareAndSet(current, current+1);
+                    System.out.println(Thread.currentThread().getName() + " a incrémenté le compteur à " + atomicInteger.get());
                 }
             });
         }
