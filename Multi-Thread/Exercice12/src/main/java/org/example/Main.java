@@ -4,8 +4,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
-    private static final Object lock = new Object();
-
     public static void main(String[] args) throws InterruptedException {
         SharedResource sharedResource = new SharedResource();
 
@@ -13,17 +11,13 @@ public class Main {
 
         threads[0] = new Thread(() -> {
             for (int i = 0; i < 5; i++) {
-                synchronized (lock){
-                    sharedResource.add(i);
-                }
+                sharedResource.add(i);
             }
         });
 
         threads[1] = new Thread(() -> {
             for (int i = 0; i < 5; i++) {
-                synchronized (lock){
-                    sharedResource.remove();
-                }
+                sharedResource.remove();
             }
         });
 
