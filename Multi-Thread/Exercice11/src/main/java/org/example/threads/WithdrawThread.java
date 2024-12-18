@@ -1,19 +1,18 @@
-package org.example.interfaces;
+package org.example.threads;
 
 import org.example.models.BankAccount;
 
-public class DepositThread implements Runnable{
-
+public class WithdrawThread implements Runnable{
     private final BankAccount bankAccount;
 
-    public DepositThread(BankAccount bankAccount) {
+    public WithdrawThread(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
     }
 
     @Override
     public void run() {
         for (int i = 0; i < 5; i++) {
-            bankAccount.deposit();
+            bankAccount.withdraw();
         }
     }
 }

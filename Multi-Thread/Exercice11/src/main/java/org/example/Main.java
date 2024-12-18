@@ -1,7 +1,7 @@
 package org.example;
 
-import org.example.interfaces.DepositThread;
-import org.example.interfaces.WithdrawThread;
+import org.example.threads.DepositThread;
+import org.example.threads.WithdrawThread;
 import org.example.models.BankAccount;
 
 public class Main {
