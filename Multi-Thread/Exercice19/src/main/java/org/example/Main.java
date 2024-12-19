@@ -1,51 +1,60 @@
 package org.example;
 
 import java.util.Random;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.*;
 
 public class Main {
+    private static final int NB_ELEMENTS = 10;
+    private static final ConcurrentLinkedQueue<String> elements = new ConcurrentLinkedQueue<>();
+    private static final Random random = new Random();
+
     public static void main(String[] args) throws InterruptedException {
-        ConcurrentLinkedQueue<String> elements = new ConcurrentLinkedQueue<>();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
 
-        Runnable addTask = () -> {
-            for (int i = 0; i < 10; i++) {
-                String element = Thread.currentThread().getName() + "-Element-"+i;
-                System.out.println(Thread.currentThread().getName() + " a ajouté : " + element);
-                elements.add(element);
-            }
-        };
+        Runnable addTask = () -> addElements();
+        Runnable removeTask = () -> removeElements();
 
-        Runnable removeTask = () -> {
-            Random random = new Random();
-            if (random.nextBoolean()) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            for (int i = 0; i < 10; i++) {
-                if(elements.isEmpty())
-                    System.out.println(Thread.currentThread().getName() + " n'a trouvé aucun élément à retirer.");
-                else{
-                    String elementPick = elements.poll();
-                    System.out.println(Thread.currentThread().getName() + " a retiré : " + elementPick);
-                }
-            }
-        };
+        executor.submit(addTask);
+        executor.submit(removeTask);
 
-        Thread thread = new Thread(addTask, "Producer");
-        Thread thread2 = new Thread(removeTask, "Consumer");
+        executor.shutdown();
 
-        Thread[] threads = new Thread[]{thread, thread2};
-        runThreads(threads);
+        if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
+            executor.shutdownNow();
+        }
 
         System.out.println("État final de la file : " + elements);
     }
 
-    private static void runThreads(Thread[] threads) throws InterruptedException {
-        for (Thread thread : threads) thread.start();
-        for (Thread thread : threads) thread.join();
+    private static void addElements() {
+        Thread.currentThread().setName("Producer");
+        for (int i = 0; i < NB_ELEMENTS; i++) {
+            String element = Thread.currentThread().getName() + "-Element-"+i;
+            System.out.println(Thread.currentThread().getName() + " a ajouté : " + element);
+            elements.add(element);
+        }
     }
 
+    private static void removeElements() {
+        Thread.currentThread().setName("Consumer");
+        delay();
+        for (int i = 0; i < NB_ELEMENTS; i++) {
+            if(elements.isEmpty())
+                System.out.println(Thread.currentThread().getName() + " n'a trouvé aucun élément à retirer.");
+            else{
+                String elementPick = elements.poll();
+                System.out.println(Thread.currentThread().getName() + " a retiré : " + elementPick);
+            }
+        }
+    }
+
+    private static void delay() {
+        if (random.nextBoolean()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
