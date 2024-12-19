@@ -1,9 +1,8 @@
 package org.example;
 
-import java.sql.Time;
 import java.time.Instant;
-import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
     private static final int NB_THREAD = 1_000;
