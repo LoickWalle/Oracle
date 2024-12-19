@@ -2,7 +2,6 @@ package org.example;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
@@ -21,17 +20,6 @@ public class Main {
         runThreads(threads);
 
         System.out.println("Liste finale des produits : " + products);
-    }
-
-    private static String pickRandomProductKey() {
-        int productPick = ThreadLocalRandom.current().nextInt(3);
-        String productKey = "";
-        switch (productPick){
-            case 0 -> productKey = "ProductA";
-            case 1 -> productKey = "ProductB";
-            case 2 -> productKey = "ProductC";
-        }
-        return productKey;
     }
 
     private static void runThreads(Thread[] threads) throws InterruptedException {
