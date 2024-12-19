@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Main {
@@ -15,6 +16,14 @@ public class Main {
         };
 
         Runnable removeTask = () -> {
+            Random random = new Random();
+            if (random.nextBoolean()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             for (int i = 0; i < 10; i++) {
                 if(elements.isEmpty())
                     System.out.println(Thread.currentThread().getName() + " n'a trouvé aucun élément à retirer.");
