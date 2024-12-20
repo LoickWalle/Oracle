@@ -1,6 +1,5 @@
 package org.example;
 
-import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -8,28 +7,26 @@ public class Main {
     private static final int NB_THREAD = 1_000;
 
     public static void main(String[] args) throws InterruptedException {
-        long start;
-        long end;
+        double nativeTime;
+        double virtualTime;
 
-        start = System.nanoTime();
-        try (ExecutorService executor = Executors.newFixedThreadPool(NB_THREAD)){
+        nativeTime = getPerformanceTime(Executors.newFixedThreadPool(NB_THREAD), "natif");
+        virtualTime = getPerformanceTime(Executors.newVirtualThreadPerTaskExecutor(), "virtuel");
+
+        System.out.println("Difference time : " + Math.abs(nativeTime - virtualTime) + " ms");
+    }
+
+    private static double getPerformanceTime(ExecutorService executor, String type) {
+        long start = System.currentTimeMillis();
+        try (executor){
             for (int i = 0; i < NB_THREAD; i++) {
                 executor.execute(task());
             }
         }
-        end = System.nanoTime();
-
-        System.out.println("Execution time (natif threads) : " + (end - start));
-        start = System.nanoTime();
-
-        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()){
-            for (int i = 0; i < NB_THREAD; i++) {
-                executor.execute(task());
-            }
-        }
-        end = Instant.now().getNano();
-
-        System.out.println("Execution time (virtual threads) : " + (end - start));
+        long end = System.currentTimeMillis();
+        double virtualTime = end - start;
+        System.out.println("Execution time ("+type+" threads) : " + virtualTime);
+        return virtualTime;
     }
 
     private static Runnable task() {
