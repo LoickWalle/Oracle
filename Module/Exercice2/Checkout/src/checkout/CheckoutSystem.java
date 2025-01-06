@@ -21,12 +21,13 @@ public class CheckoutSystem {
     }
 
     public void retrieveBook(Book book){
-        if (!isAvailable(book)) {
+        if(borrowedBooks.containsKey(book)){
             borrowedBooks.put(book, borrowedBooks.get(book) + 1);
             System.out.println("Le livre "+book.getTitle()+" a été rendu.");
-        } else {
-            System.out.println("Le livre "+book.getTitle()+" n'est pas disponible.");
         }
+        else
+            System.out.println("Livre non-reconnu !");
+
     }
 
     private boolean isAvailable(Book book) {
