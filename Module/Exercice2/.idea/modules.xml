@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/App/App.iml" filepath="$PROJECT_DIR$/App/App.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BookAPI/BookAPI.iml" filepath="$PROJECT_DIR$/BookAPI/BookAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Checkout/Checkout.iml" filepath="$PROJECT_DIR$/Checkout/Checkout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EmailNotification/EmailNotification.iml" filepath="$PROJECT_DIR$/EmailNotification/EmailNotification.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Exercice2.iml" filepath="$PROJECT_DIR$/Exercice2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Inventory/Inventory.iml" filepath="$PROJECT_DIR$/Inventory/Inventory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NotificationService/NotificationService.iml" filepath="$PROJECT_DIR$/NotificationService/NotificationService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Reports/Reports.iml" filepath="$PROJECT_DIR$/Reports/Reports.iml" />
+    </modules>
+  </component>
+</project>
