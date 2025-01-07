@@ -1,0 +1,5 @@
+Manger
+Boire
+Dormir
+Jouer
+Travailler

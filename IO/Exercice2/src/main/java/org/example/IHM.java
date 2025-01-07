@@ -1,16 +1,20 @@
 package org.example;
 
+import org.example.utils.TextUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class IHM {
     private final String journalNameFile = "journal.txt";
     private final String journalBinaryNameFile = "journal_backup.dat";
+    private final String activityNameFile = "activity.txt";
 
     public void startProgram(){
-        init();
+        List<String> possibleActivities = init();
         Scanner sc = new Scanner(System.in);
 
         int choice = 0;
@@ -24,7 +28,7 @@ public class IHM {
             switch (choice){
                 case 1 :
                     System.out.print("Votre entrée : ");
-                    JournalText.addEntry(sc.nextLine(), journalNameFile);
+                    JournalText.addEntry(sc.nextLine(), journalNameFile, possibleActivities, journalBinaryNameFile);
                     break;
                 case 2 :
                     System.out.println("Affichage du journal : ");
@@ -42,7 +46,7 @@ public class IHM {
         }while (choice != 5);
     }
 
-    public void init(){
+    public List<String> init(){
         File file = new File(journalNameFile);
 
         if (!file.exists()) {
@@ -52,6 +56,8 @@ public class IHM {
                 e.printStackTrace();
             }
         }
+
+        return TextUtils.readTextFile(activityNameFile);
     }
 
     public void displayIHM(){
