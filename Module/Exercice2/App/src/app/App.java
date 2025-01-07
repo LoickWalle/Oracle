@@ -23,7 +23,6 @@ public class App {
         checkoutSystem.borrowBook(book3);
         checkoutSystem.retrieveBook(book1);
 
-
         InventoryReport report = new InventoryReport(inventory);
         report.generateReport();
 

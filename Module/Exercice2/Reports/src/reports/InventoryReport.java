@@ -12,7 +12,7 @@ public class InventoryReport {
     public void generateReport() {
         System.out.println("Rapport d'inventaire :");
         bookInventory.getInventory().forEach((book, quantity) -> {
-            System.out.println(book.toString() + " : " + quantity + " exemplaires");
+            System.out.println(book.getTitle() +" de " + book.getAuthor() + " : " + quantity + " exemplaires");
         });
     }
 }
