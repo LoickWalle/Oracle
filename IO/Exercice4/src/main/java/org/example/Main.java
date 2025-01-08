@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.models.Book;
 import org.example.models.Library;
-import org.example.utils.SerializeUtils;
 
 import java.util.Scanner;
 
@@ -60,7 +59,7 @@ public class Main {
     }
 
     private static Library getLibrary() {
-        Library library = SerializeUtils.deserialiseLibrary();
+        Library library = Library.loadLibrary();
         if (library == null) {
             library = new Library();
         }
@@ -78,7 +77,7 @@ public class Main {
     }
 
     private static void displayLibrary() {
-        Library library = SerializeUtils.deserialiseLibrary();
+        Library library = Library.loadLibrary();
         if (library == null) {
             System.out.println("Pas de livres dans la bibliothèque.");
         } else {
