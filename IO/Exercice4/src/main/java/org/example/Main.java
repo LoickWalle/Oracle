@@ -4,47 +4,34 @@ import org.example.models.Book;
 import org.example.models.Library;
 import org.example.utils.SerializeUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        List<Book> books = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         int choice;
-        do{
-            displayIHM();
 
-            choice = sc.nextInt();
-            sc.nextLine();
+        do {
+            displayMenu();
+            choice = getUserChoice(sc);
 
-            switch (choice){
-                case 1 :
-                    String title;
-                    String author;
-                    System.out.print("Titre du livre : ");
-                    title = sc.nextLine();
-                    System.out.print("Author du livre : ");
-                    author = sc.nextLine();
-                    SerializeUtils.addBookToLibrary(new Book(title,author));
+            switch (choice) {
+                case 1:
+                    addBook(sc);
                     break;
-                case 2 :
-                    Library libraryDeserialized = SerializeUtils.deserialiseLibrary();
-                    if(libraryDeserialized == null)
-                        System.out.println("Pas de livres dans la bibliothèque.");
-                    else
-                        System.out.println(libraryDeserialized);
+                case 2:
+                    displayLibrary();
                     break;
-                case 3 :
+                case 3:
+                    System.out.println("Fin du programme...");
                     break;
                 default:
-                    System.out.println("Choix invalide !");
+                    System.out.println("Choix invalide ! Veuillez entrer un choix valide.");
             }
-        }while (choice != 3);
+        } while (choice != 3);
     }
 
-    public static void displayIHM(){
+    private static void displayMenu() {
         System.out.println("""
                 === Gestion de la bibliothèque ===
                 1. Ajouter un livre à la bibliothèque
@@ -52,5 +39,43 @@ public class Main {
                 3. Quitter le programme
                 """);
         System.out.print("Votre choix : ");
+    }
+
+    private static int getUserChoice(Scanner sc) {
+        while (!sc.hasNextInt()) {
+            System.out.println("Veuillez entrer un numéro valide.");
+            sc.next();
+        }
+        return sc.nextInt();
+    }
+
+    private static void addBook(Scanner sc) {
+        sc.nextLine();
+
+        String title = getBookTitle(sc);
+        String author = getBookAuthor(sc);
+
+        Book newBook = new Book(title, author);
+        SerializeUtils.addBookToLibrary(newBook);
+    }
+
+    private static String getBookTitle(Scanner sc) {
+        System.out.print("Titre du livre : ");
+        return sc.nextLine();
+    }
+
+    private static String getBookAuthor(Scanner sc) {
+        System.out.print("Auteur du livre : ");
+        return sc.nextLine();
+    }
+
+    private static void displayLibrary() {
+        Library library = SerializeUtils.deserialiseLibrary();
+        if (library == null) {
+            System.out.println("Pas de livres dans la bibliothèque.");
+        } else {
+            System.out.println("Bibliothèque : ");
+            System.out.println(library);
+        }
     }
 }

@@ -7,31 +7,24 @@ import java.io.*;
 
 public class SerializeUtils {
 
+    private static final String LIBRARY_FILE_PATH = "library.ser"; // File path constant
+
     public static void addBookToLibrary(Book book) {
-        try {
-            Library library = deserialiseLibrary();
+        Library library = deserialiseLibrary();
 
-            if (library == null)
-                library = new Library();
-
-            library.addBook(book);
-
-            try (ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream("library.ser"))) {
-                stream.writeObject(library);
-                System.out.println("La bibliothèque a été serialisée !");
-            }
-        } catch (IOException e) {
-            System.err.println("Error serializing the library: " + e.getMessage());
-            e.printStackTrace();
+        if (library == null) {
+            library = new Library();
         }
+
+        library.addBook(book);
+        serializeLibrary(library);
     }
 
     public static Library deserialiseLibrary() {
-        System.out.println("Deserialization de la bibliothèque !");
-
-        File file = new File("library.ser");
+        File file = new File(LIBRARY_FILE_PATH);
 
         if (!file.exists()) {
+            System.out.println("Pas de bibliothèque sauvegardée !");
             return null;
         }
 
@@ -39,8 +32,16 @@ public class SerializeUtils {
             return (Library) stream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error deserializing the library: " + e.getMessage());
-            e.printStackTrace();
+            return null;
         }
-        return null;
+    }
+
+    private static void serializeLibrary(Library library) {
+        try (ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(LIBRARY_FILE_PATH))) {
+            stream.writeObject(library);
+            System.out.println("La bibliothèque a été serialisée !");
+        } catch (IOException e) {
+            System.err.println("Error serializing the library: " + e.getMessage());
+        }
     }
 }
