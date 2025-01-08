@@ -8,8 +8,11 @@ public class Library implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<Book> allBooks = new ArrayList<>();
 
-    public Library(List<Book> allBooks) {
-        this.allBooks = allBooks;
+    public Library() {
+    }
+
+    public void addBook(Book book){
+        allBooks.add(book);
     }
 
     @Override
