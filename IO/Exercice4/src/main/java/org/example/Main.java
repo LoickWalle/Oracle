@@ -54,9 +54,17 @@ public class Main {
 
         String title = getBookTitle(sc);
         String author = getBookAuthor(sc);
+        Library library = getLibrary();
 
-        Book newBook = new Book(title, author);
-        SerializeUtils.addBookToLibrary(newBook);
+        library.addBook(new Book(title, author));
+    }
+
+    private static Library getLibrary() {
+        Library library = SerializeUtils.deserialiseLibrary();
+        if (library == null) {
+            library = new Library();
+        }
+        return library;
     }
 
     private static String getBookTitle(Scanner sc) {
@@ -74,7 +82,6 @@ public class Main {
         if (library == null) {
             System.out.println("Pas de livres dans la bibliothèque.");
         } else {
-            System.out.println("Bibliothèque : ");
             System.out.println(library);
         }
     }

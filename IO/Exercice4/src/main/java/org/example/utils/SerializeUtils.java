@@ -9,17 +9,6 @@ public class SerializeUtils {
 
     private static final String LIBRARY_FILE_PATH = "library.ser"; // File path constant
 
-    public static void addBookToLibrary(Book book) {
-        Library library = deserialiseLibrary();
-
-        if (library == null) {
-            library = new Library();
-        }
-
-        library.addBook(book);
-        serializeLibrary(library);
-    }
-
     public static Library deserialiseLibrary() {
         File file = new File(LIBRARY_FILE_PATH);
 
@@ -36,7 +25,7 @@ public class SerializeUtils {
         }
     }
 
-    private static void serializeLibrary(Library library) {
+    public static void serializeLibrary(Library library) {
         try (ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(LIBRARY_FILE_PATH))) {
             stream.writeObject(library);
             System.out.println("La bibliothèque a été serialisée !");

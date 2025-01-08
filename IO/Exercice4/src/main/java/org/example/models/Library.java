@@ -1,5 +1,7 @@
 package org.example.models;
 
+import org.example.utils.SerializeUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Library implements Serializable {
 
     public void addBook(Book book){
         allBooks.add(book);
+        SerializeUtils.serializeLibrary(this);
     }
 
     @Override
