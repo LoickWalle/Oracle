@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.models.Character;
 import org.example.models.Monster;
+import org.example.utils.CharacterUtils;
+import org.example.utils.MonsterUtils;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -11,18 +13,36 @@ public class Main {
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Character character;
-
-        character = chooseCharacter();
-
-        if(character == null)
-            return;
+        boolean isDead = false;
+        Character character = chooseCharacter();
+        if(character == null) return;
 
         System.out.println("--- Début de l'aventure ---");
 
-        System.out.println(Monster.pickRandomMonster());
+        for(int i = 0; i < 10; i++){
+            fight(character, MonsterUtils.pickRandomMonster());
+            if(character.getHealth()<=0){
+                isDead = true;
+                break;
+            }
+        }
+
+        if(isDead)
+            System.out.println("GAME OVER");
+        else
+            System.out.println("Félication ! Vous avez terminé l'aventure !");
     }
 
+    private static void fight(Character character, Monster monster){
+        System.out.println(character.getName() + " engage le combat face à " + monster.getName());
+        if(character.getStrength() >= monster.getStrength())
+            System.out.println(character.getName() + " a mis une rouste à " + monster.getName());
+        else{
+            System.out.println(character.getName() + " c'est fait botter les fesses par " + monster.getName());
+            character.setHealth(character.getHealth() - 10);
+        }
+        System.out.println(character.getName() + " a " + character.getHealth() + " points de vie.");
+    }
 
     private static Character chooseCharacter() {
         int choice;
@@ -33,20 +53,10 @@ public class Main {
             choice = getUserChoice();
             switch (choice) {
                 case 1:
-                    character = new Character(chooseCharacterName(), chooseCharacterStrength(), chooseCharacterHealth());
-                    Character.saveNewCharacter(character);
+                    character = createNewCharacter();
                     break;
                 case 2:
-                    List<Character> characters = Character.loadCharacters();
-                    if(characters.isEmpty()){
-                        System.out.println("Aucun personnage disponible...");
-                        break;
-                    }
-                    do {
-                        Character.displayCharacters(characters);
-                        System.out.print("Votre choix : ");
-                        character = Character.pickACharacter(getUserChoice());
-                    }while (character == null);
+                    character = loadExistingCharacter();
                     break;
                 case 3:
                     System.out.println("Au revoir !!");
@@ -54,9 +64,35 @@ public class Main {
                 default:
                     System.out.println("Choix invalide ! Veuillez entrer un choix valide.");
             }
-        }while (character == null && choice != 3);
+        } while (character == null && choice != 3);
 
         return character;
+    }
+
+    private static Character createNewCharacter() {
+        String name = chooseCharacterName();
+        int strength = chooseCharacterStrength();
+        int health = chooseCharacterHealth();
+
+        Character character = new Character(name, strength, health);
+        CharacterUtils.saveNewCharacter(character);
+        return character;
+    }
+
+    private static Character loadExistingCharacter() {
+        List<Character> characters = CharacterUtils.loadCharacters();
+
+        if (characters.isEmpty()) {
+            System.out.println("Aucun personnage disponible...");
+            return null;
+        }
+
+        do {
+            CharacterUtils.displayCharacters(characters);
+            System.out.print("Votre choix : ");
+            Character character = CharacterUtils.pickACharacter(getUserChoice());
+            if (character != null) return character;
+        } while (true);
     }
 
     private static void displayCharacterMenu() {
@@ -76,6 +112,7 @@ public class Main {
             choice = sc.nextInt();
         } catch (InputMismatchException e){
             System.err.println("Le choix doit être un nombre !");
+            sc.nextLine();
         }
         return choice;
     }
