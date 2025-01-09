@@ -6,16 +6,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Monster implements Serializable {
+public class Monster extends Entity implements Serializable {
     private static final String MONSTERS_FILE_PATH = "monsters.txt";
-    private String name;
-    private int strength;
-    private int health;
 
     public Monster(String name, int strength, int health) {
-        this.name = name;
-        this.strength = strength;
-        this.health = health;
+        super(name, strength, health);
     }
 
     public static Monster pickRandomMonster(){
@@ -29,14 +24,5 @@ public class Monster implements Serializable {
         }
 
         return allMonsters.get((int) (Math.random() * allMonsters.size()));
-    }
-
-    @Override
-    public String toString() {
-        return "Monster{" +
-                "name='" + name + '\'' +
-                ", strength=" + strength +
-                ", health=" + health +
-                '}';
     }
 }

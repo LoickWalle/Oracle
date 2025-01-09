@@ -4,19 +4,16 @@ import org.example.models.Character;
 import org.example.models.Monster;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        int choice;
         Character character;
 
-
-        displayMenu();
-        choice = getUserChoice();
-        character = chooseCharacter(choice);
+        character = chooseCharacter();
 
         if(character == null)
             return;
@@ -26,29 +23,43 @@ public class Main {
         System.out.println(Monster.pickRandomMonster());
     }
 
-    private static Character chooseCharacter(int choice) {
+
+    private static Character chooseCharacter() {
+        int choice;
         Character character = null;
-        switch (choice) {
-            case 1:
-                character = new Character(chooseCharacterName(), chooseCharacterStrength(), chooseCharacterHealth());
-                Character.saveNewCharacter(character);
-                break;
-            case 2:
-                Character.displayCharacters();
-                System.out.print("Votre choix : ");
-                character = Character.pickACharacter(getUserChoice());
-                System.out.println(character);
-                break;
-            case 3:
-                System.out.println("Au revoir !!");
-                break;
-            default:
-                System.out.println("Choix invalide ! Veuillez entrer un choix valide.");
-        }
+
+        do {
+            displayCharacterMenu();
+            choice = getUserChoice();
+            switch (choice) {
+                case 1:
+                    character = new Character(chooseCharacterName(), chooseCharacterStrength(), chooseCharacterHealth());
+                    Character.saveNewCharacter(character);
+                    break;
+                case 2:
+                    List<Character> characters = Character.loadCharacters();
+                    if(characters.isEmpty()){
+                        System.out.println("Aucun personnage disponible...");
+                        break;
+                    }
+                    do {
+                        Character.displayCharacters(characters);
+                        System.out.print("Votre choix : ");
+                        character = Character.pickACharacter(getUserChoice());
+                    }while (character == null);
+                    break;
+                case 3:
+                    System.out.println("Au revoir !!");
+                    break;
+                default:
+                    System.out.println("Choix invalide ! Veuillez entrer un choix valide.");
+            }
+        }while (character == null && choice != 3);
+
         return character;
     }
 
-    private static void displayMenu() {
+    private static void displayCharacterMenu() {
         System.out.println("""
                 
                 --- Bienvenue dans le jeu d'aventure textuelle ! ---
