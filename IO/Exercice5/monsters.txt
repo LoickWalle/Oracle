@@ -1,2 +1,3 @@
 Gobelin, 10, 20
 Orc, 30, 50
+Troll, 70, 100

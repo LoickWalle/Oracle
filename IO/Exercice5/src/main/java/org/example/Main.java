@@ -11,25 +11,33 @@ public class Main {
 
     public static void main(String[] args) {
         int choice;
+        Character character;
 
-        do {
-            displayMenu();
-            choice = getUserChoice();
-            chooseCharacter(choice);
-        } while (choice != 3);
+
+        displayMenu();
+        choice = getUserChoice();
+        character = chooseCharacter(choice);
+
+        if(character == null)
+            return;
 
         System.out.println("--- Début de l'aventure ---");
 
         System.out.println(Monster.pickRandomMonster());
     }
 
-    private static void chooseCharacter(int choice) {
+    private static Character chooseCharacter(int choice) {
+        Character character = null;
         switch (choice) {
             case 1:
-                Character.saveNewCharacter(new Character(chooseCharacterName(), chooseCharacterStrength(), chooseCharacterHealth()));
+                character = new Character(chooseCharacterName(), chooseCharacterStrength(), chooseCharacterHealth());
+                Character.saveNewCharacter(character);
                 break;
             case 2:
                 Character.displayCharacters();
+                System.out.print("Votre choix : ");
+                character = Character.pickACharacter(getUserChoice());
+                System.out.println(character);
                 break;
             case 3:
                 System.out.println("Au revoir !!");
@@ -37,6 +45,7 @@ public class Main {
             default:
                 System.out.println("Choix invalide ! Veuillez entrer un choix valide.");
         }
+        return character;
     }
 
     private static void displayMenu() {

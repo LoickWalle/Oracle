@@ -1,6 +1,8 @@
 package org.example.models;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Character {
     private static final String CHARACTER_FILE_PATH = "character.dat";
@@ -37,12 +39,37 @@ public class Character {
             StringBuilder stringBuilder = loadCharacters(in);
 
             String[] lines = stringBuilder.toString().split(System.lineSeparator());
+            int counter = 0;
             for (String line : lines) {
+                System.out.print(++counter+". ");
                 displayACharacter(line);
             }
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public static Character pickACharacter(int choice) {
+        Character characterPick = null;
+        if (!isCharacterFileExisting())
+            return null;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(CHARACTER_FILE_PATH))) {
+            List<String> lines = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+
+            if (choice > 0 && choice <= lines.size()) {
+                characterPick = getCharacterFromText(lines.get(choice - 1));
+            } else {
+                System.out.println("Choix invalide.");
+            }
+        } catch (IOException e) {
+            System.err.println("Erreur lors de la lecture des personnages : " + e.getMessage());
+        }
+        return characterPick;
     }
 
     private static StringBuilder loadCharacters(BufferedInputStream in) throws IOException {
@@ -67,11 +94,16 @@ public class Character {
     }
 
     public static void displayACharacter(String line){
-        line = line.trim();
-        String[] stats = line.split(", ");
-        Character character = new Character(stats[0], Integer.parseInt(stats[1]), Integer.parseInt(stats[2]));
+        Character character = getCharacterFromText(line);
         System.out.println(character);
     }
+
+    private static Character getCharacterFromText(String line) {
+        line = line.trim();
+        String[] stats = line.split(", ");
+        return new Character(stats[0], Integer.parseInt(stats[1]), Integer.parseInt(stats[2]));
+    }
+
 
     public String getName() {
         return name;
