@@ -1,6 +1,5 @@
 package org.example.utils;
 
-import org.example.TextUtils;
 import org.example.models.Monster;
 
 import java.util.ArrayList;
