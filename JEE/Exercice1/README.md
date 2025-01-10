@@ -10,9 +10,9 @@ This API allows you to manage and play quizzes, including creating new quizzes, 
 |---------|----------------------------------|---------------------------------------------------------------|
 | **GET**    | `/quizzes`                       | Récupérer la liste de tous les quiz.                          |
 | **GET**    | `/quizzes/{id}`                  | Récupérer un quiz spécifique avec toutes ses questions.       |
+| **GET**    | `/quizzes/{id}/results`          | Récupérer le score d’un joueur pour un quiz donné.            |
 | **POST**   | `/quizzes`                       | Ajouter un nouveau quiz avec ses questions et options.        |
 | **POST**   | `/quizzes/{id}/play?name=joueur` | Jouer à un quiz en soumettant des réponses avec un nom donné. |
-| **GET**    | `/quizzes/{id}/results`          | Récupérer le score d’un joueur pour un quiz donné.            |
 | **DELETE** | `/quizzes/{id}`                  | Supprimer un quiz et toutes ses questions associées.          |
 
 ### 1. **GET /quizzes**
@@ -70,7 +70,26 @@ GET /quizzes/123e4567-e89b-12d3-a456-426614174000
 ]
 ```
 
-### 3. **POST /quizzes**
+### **3. GET /quizzes/{id}/results**
+
+Retrieve the results of a quiz for a specific player, showing their score.
+
+**Example Request:**
+
+```bash
+GET /quizzes/123e4567-e89b-12d3-a456-426614174000/results
+```
+
+**Response:**
+
+```json
+{
+  "PlayerOne": 1
+}
+```
+
+
+### 4. **POST /quizzes**
 
 Add a new quiz with its questions and options.
 
@@ -92,7 +111,7 @@ Add a new quiz with its questions and options.
 }
 ```
 
-### *4. POST /quizzes/{id}/play*
+### *5. POST /quizzes/{id}/play*
 
 Play a quiz by submitting answers.
 
@@ -109,24 +128,6 @@ POST /quizzes/123e4567-e89b-12d3-a456-426614174000/play?name=PlayerOne
   "Dublin"
 ]
 ```
-**Response:**
-
-```json
-{
-  "PlayerOne": 1
-}
-```
-
-### **5. GET /quizzes/{id}/results**
-
-Retrieve the results of a quiz for a specific player, showing their score.
-
-**Example Request:**
-
-```bash
-GET /quizzes/123e4567-e89b-12d3-a456-426614174000/results
-```
-
 **Response:**
 
 ```json
