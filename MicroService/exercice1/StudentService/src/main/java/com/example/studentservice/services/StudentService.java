@@ -29,16 +29,27 @@ public class StudentService {
         return studentDTOS;
     }
 
-    public Student getStudentById(UUID id) {
-        return this.studentRepository.findById(id).orElse(null);
+    public StudentDTO getStudentById(UUID id) {
+        Student student = studentRepository.findById(id).orElse(null);
+        return student == null ? null : StudentMapper.EntityToStudentDTO(student);
     }
 
-    public Student addStudent(Student student) {
-        return this.studentRepository.save(student);
+    public StudentDTO addStudent(StudentDTO studentDTO) {
+        Student student = StudentMapper.StudentDTOToEntity(studentDTO);
+        Student savedStudent = studentRepository.save(student);
+        return StudentMapper.EntityToStudentDTO(savedStudent);
     }
 
-    public Student updateStudent(UUID id, Student student) {
-        return this.studentRepository.findById(id).orElse(null);
+    public StudentDTO updateStudent(UUID id, StudentDTO studentDTO) {
+        if(studentRepository.findById(id).isPresent()) {
+            Student student = studentRepository.findById(id).get();
+            student.setFirstName(studentDTO.getFirstName());
+            student.setLastName(studentDTO.getLastName());
+            student.setBirthday(studentDTO.getBirthDate());
+            student = this.studentRepository.save(student);
+            return StudentMapper.EntityToStudentDTO(student);
+        }
+        return null;
     }
 
     public boolean deleteStudent(UUID id) {
