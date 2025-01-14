@@ -1,4 +1,4 @@
-package com.example.gateway.dtos;
+package com.example.classservice.dtos;
 
 import java.time.LocalDate;
 

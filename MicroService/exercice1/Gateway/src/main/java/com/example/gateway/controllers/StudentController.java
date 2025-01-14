@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/student")
@@ -30,7 +29,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getAllStudent(@PathVariable String id) throws JsonProcessingException {
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable String id) throws JsonProcessingException {
         RestClient<String> restClient = new RestClient<>("http://localhost:8082/api/student/"+id);
         String response = restClient.getRequest(String.class);
         StudentDTO students = om.readValue(response, StudentDTO.class);

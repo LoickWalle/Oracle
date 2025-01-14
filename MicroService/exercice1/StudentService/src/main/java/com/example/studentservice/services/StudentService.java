@@ -18,6 +18,8 @@ public class StudentService {
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
         this.studentRepository.save(new Student("Test","Tetest", LocalDate.now()));
+        this.studentRepository.save(new Student("Test2","Tetest2", LocalDate.now()));
+        this.studentRepository.save(new Student("Test3","Tetest3", LocalDate.now()));
     }
 
     public List<StudentDTO> getAllStudents() {
@@ -25,6 +27,16 @@ public class StudentService {
         List<StudentDTO> studentDTOS = new ArrayList<>();
         for (Student student : students) {
             studentDTOS.add(StudentMapper.EntityToStudentDTO(student));
+        }
+        return studentDTOS;
+    }
+
+    public List<StudentDTO> getListOfStudentsByIds(List<UUID> studentUuids) {
+        List<Student> students = studentRepository.findAll();
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (Student student : students) {
+            if(studentUuids.contains(student.getId()))
+                studentDTOS.add(StudentMapper.EntityToStudentDTO(student));
         }
         return studentDTOS;
     }

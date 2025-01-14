@@ -2,15 +2,15 @@ package com.example.gateway.dtos;
 
 import java.time.LocalDate;
 
-public class StudentDTO {
+public class TeacherDTO {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
 
-    public StudentDTO() {
+    public TeacherDTO() {
     }
 
-    public StudentDTO(String firstName, String lastName, LocalDate birthDate) {
+    public TeacherDTO(String firstName, String lastName, LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;

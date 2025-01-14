@@ -22,6 +22,12 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
+    @PostMapping("/pick")
+    public List<StudentDTO> getListOfStudentsByIds(@RequestBody List<String> studentIds) {
+        List<UUID> uuids = studentIds.stream().map(UUID::fromString).toList();
+        return studentService.getListOfStudentsByIds(uuids);
+    }
+
     @GetMapping("/{id}")
     public StudentDTO getStudentById(@PathVariable String id) {
         return studentService.getStudentById(UUID.fromString(id));

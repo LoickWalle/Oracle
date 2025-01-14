@@ -1,9 +1,13 @@
 package com.example.teacherservice.services;
 
+import com.example.teacherservice.dtos.TeacherDTO;
 import com.example.teacherservice.entities.Teacher;
+import com.example.teacherservice.mapper.TeacherMapper;
 import com.example.teacherservice.repositories.TeacherRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,22 +17,39 @@ public class TeacherService {
 
     public TeacherService(TeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
+        this.teacherRepository.save(new Teacher("ProTest","ProTetest", LocalDate.now()));
     }
 
-    public List<Teacher> getAllTeachers() {
-        return teacherRepository.findAll();
+    public List<TeacherDTO> getAllTeachers() {
+        List<Teacher> teachers = teacherRepository.findAll();
+        List<TeacherDTO> teacherDTOS = new ArrayList<>();
+        for (Teacher teacher : teachers) {
+            teacherDTOS.add(TeacherMapper.EntityToTeacherDTO(teacher));
+        }
+        return teacherDTOS;
     }
 
-    public Teacher getTeacherById(UUID id) {
-        return this.teacherRepository.findById(id).orElse(null);
+    public TeacherDTO getTeacherById(UUID id) {
+        Teacher teacher = teacherRepository.findById(id).orElse(null);
+        return teacher == null ? null : TeacherMapper.EntityToTeacherDTO(teacher);
     }
 
-    public Teacher addTeacher(Teacher teacher) {
-        return this.teacherRepository.save(teacher);
+    public TeacherDTO addTeacher(TeacherDTO teacherDTO) {
+        Teacher teacher = TeacherMapper.TeacherDTOToEntity(teacherDTO);
+        Teacher savedTeacher = teacherRepository.save(teacher);
+        return TeacherMapper.EntityToTeacherDTO(savedTeacher);
     }
 
-    public Teacher updateTeacher(UUID id, Teacher teacher) {
-        return this.teacherRepository.findById(id).orElse(null);
+    public TeacherDTO updateTeacher(UUID id, TeacherDTO teacherDTO) {
+        if(teacherRepository.findById(id).isPresent()) {
+            Teacher teacher = teacherRepository.findById(id).get();
+            teacher.setFirstName(teacherDTO.getFirstName());
+            teacher.setLastName(teacherDTO.getLastName());
+            teacher.setBirthday(teacherDTO.getBirthDate());
+            teacher = this.teacherRepository.save(teacher);
+            return TeacherMapper.EntityToTeacherDTO(teacher);
+        }
+        return null;
     }
 
     public boolean deleteTeacher(UUID id) {
