@@ -23,27 +23,22 @@ public class StudentService {
     }
 
     public List<StudentDTO> getAllStudents() {
-        List<Student> students = studentRepository.findAll();
-        List<StudentDTO> studentDTOS = new ArrayList<>();
-        for (Student student : students) {
-            studentDTOS.add(StudentMapper.EntityToStudentDTO(student));
-        }
-        return studentDTOS;
+        return studentRepository.findAll().stream()
+                .map(StudentMapper::EntityToStudentDTO)
+                .toList();
     }
 
     public List<StudentDTO> getListOfStudentsByIds(List<UUID> studentUuids) {
-        List<Student> students = studentRepository.findAll();
-        List<StudentDTO> studentDTOS = new ArrayList<>();
-        for (Student student : students) {
-            if(studentUuids.contains(student.getId()))
-                studentDTOS.add(StudentMapper.EntityToStudentDTO(student));
-        }
-        return studentDTOS;
+        return studentRepository.findAll().stream()
+                .filter(student -> studentUuids.contains(student.getId()))
+                .map(StudentMapper::EntityToStudentDTO)
+                .toList();
     }
 
     public StudentDTO getStudentById(UUID id) {
-        Student student = studentRepository.findById(id).orElse(null);
-        return student == null ? null : StudentMapper.EntityToStudentDTO(student);
+        return studentRepository.findById(id)
+                .map(StudentMapper::EntityToStudentDTO)
+                .orElse(null);
     }
 
     public StudentDTO addStudent(StudentDTO studentDTO) {
@@ -53,15 +48,15 @@ public class StudentService {
     }
 
     public StudentDTO updateStudent(UUID id, StudentDTO studentDTO) {
-        if(studentRepository.findById(id).isPresent()) {
-            Student student = studentRepository.findById(id).get();
-            student.setFirstName(studentDTO.getFirstName());
-            student.setLastName(studentDTO.getLastName());
-            student.setBirthday(studentDTO.getBirthDate());
-            student = this.studentRepository.save(student);
-            return StudentMapper.EntityToStudentDTO(student);
-        }
-        return null;
+        return studentRepository.findById(id)
+                .map(existingStudent -> {
+                    existingStudent.setFirstName(studentDTO.getFirstName());
+                    existingStudent.setLastName(studentDTO.getLastName());
+                    existingStudent.setBirthday(studentDTO.getBirthDate());
+                    Student updatedStudent = studentRepository.save(existingStudent);
+                    return StudentMapper.EntityToStudentDTO(updatedStudent);
+                })
+                .orElse(null);
     }
 
     public boolean deleteStudent(UUID id) {

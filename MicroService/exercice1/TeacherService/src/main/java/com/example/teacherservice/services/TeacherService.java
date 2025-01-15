@@ -7,7 +7,6 @@ import com.example.teacherservice.repositories.TeacherRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,17 +20,15 @@ public class TeacherService {
     }
 
     public List<TeacherDTO> getAllTeachers() {
-        List<Teacher> teachers = teacherRepository.findAll();
-        List<TeacherDTO> teacherDTOS = new ArrayList<>();
-        for (Teacher teacher : teachers) {
-            teacherDTOS.add(TeacherMapper.EntityToTeacherDTO(teacher));
-        }
-        return teacherDTOS;
+        return teacherRepository.findAll().stream()
+                .map(TeacherMapper::EntityToTeacherDTO)
+                .toList();
     }
 
     public TeacherDTO getTeacherById(UUID id) {
-        Teacher teacher = teacherRepository.findById(id).orElse(null);
-        return teacher == null ? null : TeacherMapper.EntityToTeacherDTO(teacher);
+        return teacherRepository.findById(id)
+                .map(TeacherMapper::EntityToTeacherDTO)
+                .orElse(null);
     }
 
     public TeacherDTO addTeacher(TeacherDTO teacherDTO) {
@@ -41,15 +38,15 @@ public class TeacherService {
     }
 
     public TeacherDTO updateTeacher(UUID id, TeacherDTO teacherDTO) {
-        if(teacherRepository.findById(id).isPresent()) {
-            Teacher teacher = teacherRepository.findById(id).get();
-            teacher.setFirstName(teacherDTO.getFirstName());
-            teacher.setLastName(teacherDTO.getLastName());
-            teacher.setBirthday(teacherDTO.getBirthDate());
-            teacher = this.teacherRepository.save(teacher);
-            return TeacherMapper.EntityToTeacherDTO(teacher);
-        }
-        return null;
+        return teacherRepository.findById(id)
+                .map(existingTeacher -> {
+                    existingTeacher.setFirstName(teacherDTO.getFirstName());
+                    existingTeacher.setLastName(teacherDTO.getLastName());
+                    existingTeacher.setBirthday(teacherDTO.getBirthDate());
+                    Teacher updatedTeacher = teacherRepository.save(existingTeacher);
+                    return TeacherMapper.EntityToTeacherDTO(updatedTeacher);
+                })
+                .orElse(null);
     }
 
     public boolean deleteTeacher(UUID id) {

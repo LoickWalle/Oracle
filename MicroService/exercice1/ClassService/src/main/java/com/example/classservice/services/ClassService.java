@@ -39,52 +39,66 @@ public class ClassService {
         return classDTOS;
     }
 
-    public ClassResponseDTO getClassById(UUID id) throws JsonProcessingException {
-        Class classEntity = classRepository.findById(id).orElse(null);
-        if(classEntity == null)
-            return null;
+    public ClassResponseDTO getClassById(UUID id) {
+        return classRepository.findById(id)
+                .map(aClass -> {
+                    try {
+                        TeacherDTO teacherDTO = getTeacherById(aClass.getTeacherID().toString());
+                        List<StudentDTO> studentDTOs = getStudentsByIds(
+                                aClass.getStudentsID().stream()
+                                        .map(UUID::toString)
+                                        .toList()
+                        );
 
-        ClassResponseDTO classDTO = new ClassResponseDTO();
-        classDTO.setTeacher(getTeacherById(classEntity.getTeacherID().toString()));
-        classDTO.setStudents(getStudentsByIds(classEntity.getStudentsID().stream().map(UUID::toString).toList()));
-        return classDTO;
+                        return buildClassResponseDTO(teacherDTO, studentDTOs);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .orElse(null);
     }
 
     public ClassResponseDTO createClass(ClassRequestDTO classRequestDTO) throws JsonProcessingException {
-        ClassResponseDTO classResponseDTO = new ClassResponseDTO();
         TeacherDTO teacherDTO = getTeacherById(classRequestDTO.getTeacher());
-        List<StudentDTO> studentDTOS = getStudentsByIds(classRequestDTO.getStudents());
+        List<StudentDTO> studentDTOs = getStudentsByIds(classRequestDTO.getStudents());
 
-        if(teacherDTO !=null && studentDTOS != null && !studentDTOS.isEmpty()) {
-            List<UUID> studentUuids = classRequestDTO.getStudents().stream().map(UUID::fromString).toList();
+        if (teacherDTO != null && studentDTOs != null && !studentDTOs.isEmpty()) {
+            List<UUID> studentUuids = classRequestDTO.getStudents().stream()
+                    .map(UUID::fromString)
+                    .toList();
             UUID teacherUuid = UUID.fromString(classRequestDTO.getTeacher());
 
-            this.classRepository.save(new Class(studentUuids, teacherUuid));
+            classRepository.save(new Class(studentUuids, teacherUuid));
 
-            classResponseDTO.setTeacher(teacherDTO);
-            classResponseDTO.setStudents(studentDTOS);
-            return classResponseDTO;
+            return buildClassResponseDTO(teacherDTO, studentDTOs);
         }
 
         return null;
     }
 
-    public TeacherDTO getTeacherById(String id) {
-        RestClient<String> restClient = new RestClient<>("http://localhost:8083/api/teacher/"+id);
+    private TeacherDTO getTeacherById(String id) {
+        RestClient<String> restClient = new RestClient<>("http://localhost:8083/api/teacher/" + id);
         String teacherResponse = restClient.getRequest(String.class);
-        TeacherDTO teacherDTO = null;
         try {
-            teacherDTO = om.readValue(teacherResponse, TeacherDTO.class);
+            return om.readValue(teacherResponse, TeacherDTO.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return null;
         }
-        return teacherDTO;
     }
 
-    public List<StudentDTO> getStudentsByIds(List<String> ids) throws JsonProcessingException {
-        RestClient<String> restClient2 = new RestClient<>("http://localhost:8082/api/student/pick");
+    private List<StudentDTO> getStudentsByIds(List<String> ids) throws JsonProcessingException {
+        RestClient<String> restClient = new RestClient<>("http://localhost:8082/api/student/pick");
         String studentRequestBody = om.writeValueAsString(ids);
-        String studentResponse = restClient2.postRequest(studentRequestBody, String.class);
-        return om.readValue(studentResponse, new TypeReference<>(){});
+        String studentResponse = restClient.postRequest(studentRequestBody, String.class);
+        return om.readValue(studentResponse, new TypeReference<>() {});
+    }
+
+    private ClassResponseDTO buildClassResponseDTO(TeacherDTO teacherDTO, List<StudentDTO> studentDTOs) {
+        ClassResponseDTO classResponseDTO = new ClassResponseDTO();
+        classResponseDTO.setTeacher(teacherDTO);
+        classResponseDTO.setStudents(studentDTOs);
+        return classResponseDTO;
     }
 }
