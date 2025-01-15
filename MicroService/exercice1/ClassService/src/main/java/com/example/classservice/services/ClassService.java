@@ -1,12 +1,12 @@
 package com.example.classservice.services;
 
-import com.example.classservice.dtos.ClassRequestDTO;
-import com.example.classservice.dtos.ClassResponseDTO;
-import com.example.classservice.dtos.StudentDTO;
-import com.example.classservice.dtos.TeacherDTO;
 import com.example.classservice.entities.Class;
 import com.example.classservice.repositories.ClassRepository;
 import com.example.classservice.utils.RestClient;
+import com.example.commondto.classes.ClassRequestDTO;
+import com.example.commondto.classes.ClassResponseDTO;
+import com.example.commondto.student.StudentDTO;
+import com.example.commondto.teacher.TeacherDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

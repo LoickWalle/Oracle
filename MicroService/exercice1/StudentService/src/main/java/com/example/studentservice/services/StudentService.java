@@ -1,6 +1,6 @@
 package com.example.studentservice.services;
 
-import com.example.studentservice.dtos.StudentDTO;
+import com.example.commondto.student.StudentDTO;
 import com.example.studentservice.entities.Student;
 import com.example.studentservice.mapper.StudentMapper;
 import com.example.studentservice.repositories.StudentRepository;

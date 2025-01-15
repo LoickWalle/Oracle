@@ -1,6 +1,6 @@
 package com.example.studentservice.controllers;
 
-import com.example.studentservice.dtos.StudentDTO;
+import com.example.commondto.student.StudentDTO;
 import com.example.studentservice.services.StudentService;
 import org.springframework.web.bind.annotation.*;
 

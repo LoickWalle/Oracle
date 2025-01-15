@@ -1,7 +1,7 @@
 package com.example.gateway.controllers;
 
-import com.example.gateway.dtos.ClassDTO;
-import com.example.gateway.dtos.ClassRequestDTO;
+import com.example.commondto.classes.ClassRequestDTO;
+import com.example.commondto.classes.ClassResponseDTO;
 import com.example.gateway.utils.RestClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,25 +22,25 @@ public class ClassController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClassDTO>> getAllClasses() throws JsonProcessingException {
+    public ResponseEntity<List<ClassResponseDTO>> getAllClasses() throws JsonProcessingException {
         RestClient<String> restClient = new RestClient<>("http://localhost:8084/api/class");
         String response = restClient.getRequest(String.class);
-        List<ClassDTO> classes = om.readValue(response, new TypeReference<>() {});
+        List<ClassResponseDTO> classes = om.readValue(response, new TypeReference<>() {});
         return new ResponseEntity<>(classes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClassDTO> getStudentById(@PathVariable String id) throws JsonProcessingException {
+    public ResponseEntity<ClassResponseDTO> getStudentById(@PathVariable String id) throws JsonProcessingException {
         RestClient<String> restClient = new RestClient<>("http://localhost:8084/api/class/"+id);
         String response = restClient.getRequest(String.class);
-        ClassDTO classDTO = om.readValue(response, ClassDTO.class);
+        ClassResponseDTO classDTO = om.readValue(response, ClassResponseDTO.class);
         return new ResponseEntity<>(classDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ClassDTO> createClass(@RequestBody ClassRequestDTO classRequestDTO) throws JsonProcessingException {
-        RestClient<ClassDTO> restClient = new RestClient<>("http://localhost:8084/api/class");
-        ClassDTO classDTOResponse = restClient.postRequest(om.writeValueAsString(classRequestDTO), ClassDTO.class);
+    public ResponseEntity<ClassResponseDTO> createClass(@RequestBody ClassRequestDTO classRequestDTO) throws JsonProcessingException {
+        RestClient<ClassResponseDTO> restClient = new RestClient<>("http://localhost:8084/api/class");
+        ClassResponseDTO classDTOResponse = restClient.postRequest(om.writeValueAsString(classRequestDTO), ClassResponseDTO.class);
         return new ResponseEntity<>(classDTOResponse, HttpStatus.CREATED);
     }
 }

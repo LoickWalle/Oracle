@@ -1,8 +1,8 @@
 package com.example.classservice.controllers;
 
-import com.example.classservice.dtos.ClassRequestDTO;
-import com.example.classservice.dtos.ClassResponseDTO;
 import com.example.classservice.services.ClassService;
+import com.example.commondto.classes.ClassRequestDTO;
+import com.example.commondto.classes.ClassResponseDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.*;
 

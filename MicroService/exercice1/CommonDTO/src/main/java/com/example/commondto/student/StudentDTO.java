@@ -1,16 +1,16 @@
-package com.example.teacherservice.dtos;
+package com.example.commondto.student;
 
 import java.time.LocalDate;
 
-public class TeacherDTO {
+public class StudentDTO {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
 
-    public TeacherDTO() {
+    public StudentDTO() {
     }
 
-    public TeacherDTO(String firstName, String lastName, LocalDate birthDate) {
+    public StudentDTO(String firstName, String lastName, LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;

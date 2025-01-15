@@ -1,6 +1,6 @@
 package com.example.gateway.controllers;
 
-import com.example.gateway.dtos.StudentDTO;
+import com.example.commondto.student.StudentDTO;
 import com.example.gateway.utils.RestClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

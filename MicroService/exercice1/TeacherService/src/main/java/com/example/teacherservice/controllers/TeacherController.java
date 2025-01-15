@@ -1,7 +1,7 @@
 package com.example.teacherservice.controllers;
 
-import com.example.teacherservice.dtos.TeacherDTO;
 import com.example.teacherservice.services.TeacherService;
+import com.example.commondto.teacher.TeacherDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

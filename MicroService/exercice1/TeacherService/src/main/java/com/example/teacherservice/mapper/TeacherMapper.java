@@ -1,6 +1,6 @@
 package com.example.teacherservice.mapper;
 
-import com.example.teacherservice.dtos.TeacherDTO;
+import com.example.commondto.teacher.TeacherDTO;
 import com.example.teacherservice.entities.Teacher;
 
 public class TeacherMapper {

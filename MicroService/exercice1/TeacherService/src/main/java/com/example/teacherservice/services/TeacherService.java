@@ -1,6 +1,6 @@
 package com.example.teacherservice.services;
 
-import com.example.teacherservice.dtos.TeacherDTO;
+import com.example.commondto.teacher.TeacherDTO;
 import com.example.teacherservice.entities.Teacher;
 import com.example.teacherservice.mapper.TeacherMapper;
 import com.example.teacherservice.repositories.TeacherRepository;
