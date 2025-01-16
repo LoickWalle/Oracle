@@ -10,15 +10,17 @@ public class Dinosaurs {
     private String name;
     private String species;
     private double age_million_years;
+    private double age_century_years;
 
     public Dinosaurs() {
     }
 
-    public Dinosaurs(long id, String name, String species, double age_million_years) {
+    public Dinosaurs(long id, String name, String species, double age_million_years, double age_century_years) {
         this.id = id;
         this.name = name;
         this.species = species;
         this.age_million_years = age_million_years;
+        this.age_century_years = age_century_years;
     }
 
     public long getId() {
@@ -51,5 +53,13 @@ public class Dinosaurs {
 
     public void setAge_million_years(double age_million_years) {
         this.age_million_years = age_million_years;
+    }
+
+    public double getAge_century_years() {
+        return age_century_years;
+    }
+
+    public void setAge_century_years(double age_century_years) {
+        this.age_century_years = age_century_years;
     }
 }

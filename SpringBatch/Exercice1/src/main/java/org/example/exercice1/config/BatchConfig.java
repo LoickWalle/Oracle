@@ -63,7 +63,7 @@ public class BatchConfig {
     @Bean
     public ItemProcessor<Dinosaurs, Dinosaurs> processor() {
         return dinosaurs -> {
-            dinosaurs.setAge_million_years(dinosaurs.getAge_million_years() * 10000f);
+            dinosaurs.setAge_century_years(dinosaurs.getAge_million_years() * 10000f);
             return dinosaurs;
         };
     }
@@ -72,7 +72,7 @@ public class BatchConfig {
     public JdbcBatchItemWriter<Dinosaurs> writer(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Dinosaurs>()
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-                .sql("INSERT INTO dinosaurs (id,name,species,age_million_years) VALUES (:id,:name,:species,:age_million_years)")
+                .sql("INSERT INTO dinosaurs (id,name,species,age_million_years,age_century_years) VALUES (:id,:name,:species,:age_million_years,:age_century_years)")
                 .dataSource(dataSource).build();
     }
 }
