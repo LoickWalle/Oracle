@@ -63,7 +63,7 @@ public class BatchConfig {
     @Bean
     public ItemProcessor<Dinosaurs, Dinosaurs> processor() {
         return dinosaurs -> {
-            dinosaurs.setAge_million_years(dinosaurs.getAge_million_years() * 100f);
+            dinosaurs.setAge_million_years(dinosaurs.getAge_million_years() * 10000f);
             return dinosaurs;
         };
     }
