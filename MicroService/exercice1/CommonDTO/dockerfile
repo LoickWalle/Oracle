@@ -1,0 +1,19 @@
+FROM maven:3.9.4-eclipse-temurin-21 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+
+RUN mvn dependency:go-offline -B
+
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+COPY --from=build /app/target/common-dto-1.0.0.jar /app/libs/common-dto.jar
+
+EXPOSE 8080

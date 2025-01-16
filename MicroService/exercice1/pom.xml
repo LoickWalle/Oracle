@@ -10,7 +10,11 @@
 
     <modules>
         <module>common-dto</module>
+        <module>common-config</module>
         <module>gateway</module>
         <module>student-service</module>
+        <module>teacher-service</module>
+        <module>class-service</module>
+        <module>field-service</module>
     </modules>
 </project>

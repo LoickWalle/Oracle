@@ -10,6 +10,7 @@ import com.example.commondto.teacher.TeacherDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.commonconfig.endpoinds.Path;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class ClassService {
     }
 
     private TeacherDTO getTeacherById(String id) {
-        RestClient<String> restClient = new RestClient<>("http://localhost:8083/api/teacher/" + id);
+        RestClient<String> restClient = new RestClient<>(Path.TEACHER_API_URL +"/" + id);
         String teacherResponse = restClient.getRequest(String.class);
         try {
             return om.readValue(teacherResponse, TeacherDTO.class);
@@ -89,7 +90,7 @@ public class ClassService {
     }
 
     private List<StudentDTO> getStudentsByIds(List<String> ids) throws JsonProcessingException {
-        RestClient<String> restClient = new RestClient<>("http://localhost:8082/api/student/pick");
+        RestClient<String> restClient = new RestClient<>(Path.STUDENT_API_URL+"/pick");
         String studentRequestBody = om.writeValueAsString(ids);
         String studentResponse = restClient.postRequest(studentRequestBody, String.class);
         return om.readValue(studentResponse, new TypeReference<>() {});

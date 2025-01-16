@@ -59,6 +59,11 @@
             <artifactId>common-dto</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.example.commonconfig</groupId>
+            <artifactId>common-config</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

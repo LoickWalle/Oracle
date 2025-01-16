@@ -2,13 +2,14 @@ package com.example.teacherservice.controllers;
 
 import com.example.commondto.teacher.TeacherDTO;
 import com.example.teacherservice.services.TeacherService;
+import org.example.commonconfig.endpoinds.Path;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/teacher")
+@RequestMapping(Path.TEACHER_ENDPOINT)
 public class TeacherController {
 
     private final TeacherService teacherService;

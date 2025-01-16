@@ -2,13 +2,14 @@ package com.example.studentservice.controllers;
 
 import com.example.commondto.student.StudentDTO;
 import com.example.studentservice.services.StudentService;
+import org.example.commonconfig.endpoinds.Path;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/student")
+@RequestMapping(Path.STUDENT_ENDPOINT)
 public class StudentController {
 
     private final StudentService studentService;
