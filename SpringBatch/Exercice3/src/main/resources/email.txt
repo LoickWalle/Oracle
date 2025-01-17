@@ -1,0 +1,11 @@
+id,customer_id,subject,content
+1,1001,Meeting Reminder,Reminder about the meeting tomorrow at 10 AM.
+2,1002,Order Confirmation,Your order has been confirmed. Expected delivery: 3 days.
+3,1001,Project Update,Here is the latest update on the project status.
+4,1003,Payment Received,We have received your payment. Thank you for your purchase.
+5,1002,Subscription Expiry,Your subscription is expiring soon. Renew to continue enjoying the service.
+6,1001,Appointment Reminder,Reminder for your doctor’s appointment at 2 PM today.
+7,1004,Product Shipment,Your product has been shipped and will arrive in 5 days.
+8,1003,Service Upgrade,Your service plan has been upgraded successfully.
+9,1001,Feedback Request,Please provide your feedback on our recent service.
+10,1004,Special Offer,Enjoy a special discount on your next purchase. Use code "DISCOUNT10".
