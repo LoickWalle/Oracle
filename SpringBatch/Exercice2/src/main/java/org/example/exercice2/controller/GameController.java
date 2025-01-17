@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @RestController
@@ -58,23 +60,7 @@ public class GameController {
         try {
             String filePath = "games.csv";
             File destinationFile = new File(filePath);
-
-            if(destinationFile.createNewFile()){
-                try (InputStream inputStream = file.getInputStream();
-                     FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
-
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-
-                    System.out.println("File content copied successfully.");
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            Files.copy(file.getInputStream(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("time",System.currentTimeMillis())
