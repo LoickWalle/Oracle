@@ -7,7 +7,12 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -44,12 +49,42 @@ public class GameController {
         return this.gameService.deleteGameById(id);
     }
 
-    @GetMapping("/uploadCSV")
-    public void saveCSV () throws Exception{
-        JobParameters jobParameters = new JobParametersBuilder()
-                .addLong("time",System.currentTimeMillis())
-                .toJobParameters();
+    @PostMapping("/uploadCSV")
+    public void saveCSV (@RequestParam("file") MultipartFile file) throws Exception{
+        if (file.isEmpty()) {
+            return;
+        }
 
-        jobLauncher.run(importJob,jobParameters);
+        try {
+            String filePath = "games.csv";
+            File destinationFile = new File(filePath);
+
+            if(destinationFile.createNewFile()){
+                try (InputStream inputStream = file.getInputStream();
+                     FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
+
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    System.out.println("File content copied successfully.");
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addLong("time",System.currentTimeMillis())
+                    .toJobParameters();
+
+            jobLauncher.run(importJob,jobParameters);
+
+            System.out.println("CSV file processed");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -44,9 +44,10 @@ public class BatchConfig {
 
     @Bean
     public FlatFileItemReader<Game> reader() {
+        String filePath = "games.csv";
         return new FlatFileItemReaderBuilder<Game>()
                 .name("gameItemReader")
-                .resource(new ClassPathResource("games.csv"))
+                .resource(new FileSystemResource("games.csv"))
                 .linesToSkip(1)
                 .delimited()
                 .names("name", "gender", "price")

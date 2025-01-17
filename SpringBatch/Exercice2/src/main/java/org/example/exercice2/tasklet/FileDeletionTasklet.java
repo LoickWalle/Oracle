@@ -14,7 +14,7 @@ public class FileDeletionTasklet implements Tasklet {
     private final String filePath;
 
     public FileDeletionTasklet() {
-        this.filePath = "src/main/resources/games.csv";
+        this.filePath = "games.csv";
     }
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
