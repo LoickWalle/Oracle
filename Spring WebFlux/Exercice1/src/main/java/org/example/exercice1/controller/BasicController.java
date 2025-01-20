@@ -16,7 +16,7 @@ public class BasicController {
     }
 
     @GetMapping("/numbers")
-    public Flux<String> numbers() {
-        return Flux.just("1", "2", "3", "4", "5");
+    public Flux<Integer> numbers() {
+        return Flux.just(1, 2, 3, 4, 5);
     }
 }
