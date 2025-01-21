@@ -40,11 +40,11 @@ public class TaskService {
         return Mono.just(tasks.get(id));
     }
 
-    public Mono<Boolean> deleteTask(UUID id){
+    public boolean deleteTask(UUID id){
         if(tasks.containsKey(id)){
             tasks.remove(id);
-            return Mono.just(true);
+            return true;
         }
-        return Mono.just(false);
+        return false;
     }
 }

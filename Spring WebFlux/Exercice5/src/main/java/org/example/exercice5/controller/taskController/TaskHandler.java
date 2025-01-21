@@ -42,11 +42,6 @@ public class TaskHandler {
 
     public Mono<ServerResponse> deleteTask(ServerRequest request) {
         UUID taskId = UUID.fromString(request.pathVariable("id"));
-        return taskService.deleteTask(taskId)
-                .flatMap(deleted -> {
-                    if (deleted)
-                        return ServerResponse.ok().bodyValue(true);
-                    return ServerResponse.notFound().build();
-                });
+        return taskService.deleteTask(taskId) ? ServerResponse.ok().bodyValue(true) : ServerResponse.notFound().build();
     }
 }

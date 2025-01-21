@@ -12,7 +12,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class TaskRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> productRoutes(TaskHandler taskHandler) {
+    public RouterFunction<ServerResponse> taskRoutes(TaskHandler taskHandler) {
         return route(GET("/api/tasks"), taskHandler::getAllTasks)
                 .andRoute(GET("/api/tasks/{id}"), taskHandler::getTaskByID)
                 .andRoute(POST("/api/tasks"), taskHandler::createTask)
