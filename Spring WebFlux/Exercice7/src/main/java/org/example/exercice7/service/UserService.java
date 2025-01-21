@@ -31,8 +31,10 @@ public class UserService {
     public Mono<User> updateUser(UUID id, User user) {
         return userRepository.findById(id)
                 .flatMap(existingUser -> {
-                    user.setId(id);
-                    return userRepository.save(user);
+                    existingUser.setUsername(user.getUsername());
+                    existingUser.setEmail(user.getEmail());
+                    existingUser.setActive(user.isActive());
+                    return userRepository.save(existingUser);
                 })
                 .switchIfEmpty(Mono.empty());
     }

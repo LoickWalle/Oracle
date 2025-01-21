@@ -57,8 +57,10 @@ public class OrderService {
     public Mono<Order> updateOrder(UUID id, Order order) {
         return orderRepository.findById(id)
                 .flatMap(existingOrder -> {
-                    order.setId(id);
-                    return orderRepository.save(order);
+                    existingOrder.setCustomerName(order.getCustomerName());
+                    existingOrder.setTotalAmount(order.getTotalAmount());
+                    existingOrder.setStatus(order.getStatus());
+                    return orderRepository.save(existingOrder);
                 })
                 .switchIfEmpty(Mono.empty());
     }

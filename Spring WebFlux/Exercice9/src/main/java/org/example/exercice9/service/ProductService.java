@@ -32,11 +32,13 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Mono<Product> updateProduct(UUID id, Product order) {
+    public Mono<Product> updateProduct(UUID id, Product product) {
         return productRepository.findById(id)
                 .flatMap(existingProduct -> {
-                    order.setId(id);
-                    return productRepository.save(order);
+                    existingProduct.setName(product.getName());
+                    existingProduct.setPrice(product.getPrice());
+                    existingProduct.setStock(product.getStock());
+                    return productRepository.save(existingProduct);
                 })
                 .switchIfEmpty(Mono.empty());
     }
