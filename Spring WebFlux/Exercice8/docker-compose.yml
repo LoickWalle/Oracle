@@ -3,9 +3,9 @@ services:
     image: postgres:15-alpine
     container_name: postgres-db
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -23,6 +23,22 @@ services:
       - postgres-db
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+
+  spring-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-api
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres-db
+    environment:
+      SPRING_R2DBC_URL: r2dbc:postgresql://postgres-db:5432/${DB_NAME}
+      SPRING_R2DBC_USERNAME: ${DB_USER}
+      SPRING_R2DBC_PASSWORD: ${DB_PASSWORD}
+      SPRING_SQL_INIT_MODE: always
+      SPRING_SQL_INIT_SCHEMA_LOCATIONS: classpath:schema.sql
 
 volumes:
   postgres_data:
