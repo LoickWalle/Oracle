@@ -12,6 +12,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtAuthentificationFilter implements ServerAuthenticationConverter {
@@ -30,11 +31,18 @@ public class JwtAuthentificationFilter implements ServerAuthenticationConverter 
             try {
                 Claims claims = jwtService.validateToken(token);
                 String userName = claims.getSubject();
+
+                List<String> roles = claims.get("role", List.class);
+
+                List<SimpleGrantedAuthority> authorities = roles.stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                        .toList();
+
                 return Mono.just(new UsernamePasswordAuthenticationToken(
                         userName,
                         null,
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
-            }catch (Exception e) {
+                        authorities));
+            } catch (Exception e) {
                 return Mono.error(e);
             }
         }

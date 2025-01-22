@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,12 +21,12 @@ public class LoginController {
     @PostMapping("/user")
     public String loginUser(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
-        return jwtService.generateToken(username, Map.of("role", "USER"));
+        return jwtService.generateToken(username, List.of("USER"));
     }
 
     @PostMapping("/admin")
     public String loginAdmin(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
-        return jwtService.generateToken(username, Map.of("role", "ADMIN"));
+        return jwtService.generateToken(username, List.of("USER", "ADMIN"));
     }
 }
